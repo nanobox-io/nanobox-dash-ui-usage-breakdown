@@ -13,12 +13,18 @@ html(lang="en")
     // endbuild
 
   body
-    p Hello from the stage/index.js.
 
     // build:remove 
+    script(src="bower-libs/eventify/dist/eventify.min.js")
     script(src="bower-libs/jquery/dist/jquery.js")
+    script(src="bower-libs/velocity/velocity.js")
     script(src="bower-libs/jade/runtime.js")
+    script(src="bower-libs/d3/d3.min.js")
+    script(src="https://use.typekit.net/cqd5kth.js")
     // endbuild
+      
+    //- 
+    script(type="text/javascript") try{Typekit.load({ async: true });}catch(e){}
 
     // build:js app.js
     script(src="js/main.js")
@@ -26,10 +32,5 @@ html(lang="en")
     
     // build:remove 
     script(src="stage/js/stage.js")
-    // endbuild
-    
-    
-    
-    // build:remove 
     script(src="http://localhost:35729/livereload.js")
     // endbuild

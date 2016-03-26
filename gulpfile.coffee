@@ -32,7 +32,7 @@ wrap         = require 'gulp-wrap'
 
 jadeStagePath     = 'stage/index.jade'
 jadePath          = 'app/jade/**/*.jade'
-cssPath           = 'app/scss/**/*.scss'
+cssPath           = ['app/scss/**/*.scss', 'libs/core-styles/**/*.scss']
 cssStagePath      = 'stage/stage.scss'
 appJsPath         = 'app/coffee/**/*.coffee'
 stageJsPath       = 'stage/**/*.coffee'

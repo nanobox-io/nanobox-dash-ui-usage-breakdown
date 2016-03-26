@@ -4,7 +4,9 @@
   "dependencies": {
     "jquery": "*",
     "velocity": "~1.1.0",
-    "shadow-icons": "tolmark12/shadow-icons-js"
+    "shadow-icons": "tolmark12/shadow-icons-js",
+    "d3": "~3.5.16",
+    "eventify": "sdomino/eventify"
   },
   "ignore": [
     "app",
