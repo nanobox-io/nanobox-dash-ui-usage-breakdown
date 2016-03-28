@@ -3,7 +3,7 @@
   
   //- 
   .gauges
-    //- loaded in via javascript
+    //- populated via javascript
   
   //- 
   table.services
@@ -12,12 +12,19 @@
     thead.labels
       tr
         td(colspan="2")
-        td.label RAM
-        td.label CPU
+        //- data populated via javascript
       
     //- 
-    tbody.stats
-      //- stats loaded via javascript
-
-//- 
-button#test TEST
+    tbody#services.stats
+      //- rows populated via javascript
+      
+    //- 
+    tbody#internals.stats
+      //- rows populated via javascript
+    
+    //-
+    tbody#unused.stats
+      tr
+        td(colspan="1")
+        td.stat.name unused
+        //- data populated via javascript

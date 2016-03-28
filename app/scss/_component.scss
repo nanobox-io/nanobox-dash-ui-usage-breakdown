@@ -6,7 +6,8 @@ $light-gray : #ececec;
 $dark-gray  : #8593a6;
 
 //
-$service-colors: $red $blue $green blue green orange purple brown black;
+$service-colors: $red $blue $green blue green orange purple;
+$internal-colors: $dark-gray brown black;
 
 .component            {padding:15px; background:$white;
   h4.title            {text-align:center; font-style:italic; color:$blue;}
@@ -14,11 +15,23 @@ $service-colors: $red $blue $green blue green orange purple brown black;
     .gauge            {
       .title          {fill:#8593a6; font-size:21px; text-transform:uppercase;}
       g.used          {
+        path          {
 
-        // loop through each path assigning a color from the colors array
-        @each $color in $service-colors {
-          $i : index($service-colors, $color);
-          path:nth-child(#{$i}) {fill: $color;}
+          // loop through each path.service assigning a service-color
+          &.service   {
+            @each $color in $service-colors {
+              $i : index($service-colors, $color);
+              &:nth-child(#{$i}) {fill: $color;}
+            }
+          }
+
+          // loop through each path.internal assigning an internal-color
+          &.internal {
+            @each $color in $internal-colors {
+              $i : index($internal-colors, $color);
+              &:nth-child(#{$i}) {fill: $color;}
+            }
+          }
         }
       }
     }
@@ -27,7 +40,7 @@ $service-colors: $red $blue $green blue green orange purple brown black;
     tr td             {padding:3px 0px;}
 
     thead.labels      {
-      tr              {td.label {color:$dark-gray;}}
+      tr              {td.label {width:20%; color:$dark-gray; text-transform:uppercase;}}
     }
 
     tbody.stats       {
@@ -36,19 +49,27 @@ $service-colors: $red $blue $green blue green orange purple brown black;
         td.stat       {width:0px; background:$dark-gray; color:$white;
           &.name      {padding-left:21px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
         }
+      }
 
-        //
-        &.service      {
-
-          // loop through each service assigning a color from the colors array
-          @each $color in $service-colors {
-            $i : index($service-colors, $color);
-            &:nth-child(#{$i}) .stat {background: $color;}
-          }
+      // loop through each "service" assigning a service-color
+      &#services {
+        @each $color in $service-colors {
+          $i : index($service-colors, $color);
+          tr:nth-child(#{$i}) {td.stat {background: $color;}}
         }
+      }
 
-        //
-        &:last-child       {.stat {background:$light-gray; color:$dark-gray;}}
+      // loop through each "internal" assigning an internal-color
+      &#internals {
+        @each $color in $internal-colors {
+          $i : index($internal-colors, $color);
+          tr:nth-child(#{$i}) {td.stat {background: $color;}}
+        }
+      }
+
+      //
+      &#unused {
+        tr td.stat {background:$light-gray; color:$dark-gray;}
       }
     }
   }

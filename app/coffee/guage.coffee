@@ -50,29 +50,78 @@ module.exports = class Guage
         .call(@arcTween, @arc, @degToRad(180))
 
     # draw each "used" portion
-    used = g.append("svg:g").attr(class : "used")
+    used      = g.append("svg:g").attr(class : "used")
+    services  = used.append("svg:g").attr(class : "services")
+    internals = used.append("svg:g").attr(class : "internals")
 
     from = 0
     to = 0
 
     for i, d of @data
 
-      # *2 becuase this is a full circle cut in half
-      to += (d*100)*2
+      # group the data by "type" (service or internal)
+      target = if d.type == "service" then services else internals
 
+      # *2 becuase this is a full circle cut in half
+      to += (d.value*100)*2
+
+      #
       arc = d3.svg.arc().innerRadius(@innerRadius).outerRadius(@outerRadius).startAngle(@degToRad(from))
 
-      used.append("svg:path")
+      # append the data
+      target.append("svg:path")
         .datum({endAngle: @degToRad(from)})
         .style("stroke" : "white", "stroke-width" : 2)
-        .attr("d" : arc)
+        .attr(
+          d : arc
+          class : d.type
+        )
         .transition()
           .delay(250*i)
           .duration(250)
           .call(@arcTween, arc, @degToRad(to))
 
       # *2 because this is a full circle cut in half
-      from += (d*100)*2
+      from += (d.value*100)*2
+
+  #
+  update : (data) ->
+
+    services  = @svg.select("svg g.used g.services")
+    internals = @svg.select("svg g.used g.internals")
+
+    console.log "THINGS!", services, internals
+
+    from = 0
+    to = 0
+
+    # for i, d of data
+    #
+    #   # group the data by "type" (service or internal)
+    #   target = if d.type == "service" then services else internals
+    #
+    #   # *2 becuase this is a full circle cut in half
+    #   to += (d.value*100)*2
+    #
+    #   #
+    #   arc = d3.svg.arc().innerRadius(@innerRadius).outerRadius(@outerRadius).startAngle(@degToRad(from))
+    #
+    #   # append the data
+    #   target.append("svg:path")
+    #     .datum({endAngle: @degToRad(from)})
+    #     .style("stroke" : "white", "stroke-width" : 2)
+    #     .attr(
+    #       d : arc
+    #       class : d.type
+    #     )
+    #     .transition()
+    #       .delay(250*i)
+    #       .duration(250)
+    #       .call(@arcTween, arc, @degToRad(to))
+    #
+    #   # *2 because this is a full circle cut in half
+    #   from += (d.value*100)*2
+
 
   ## util
 
