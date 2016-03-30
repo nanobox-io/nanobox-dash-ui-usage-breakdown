@@ -1,11 +1,8 @@
 component = require 'jade/component'
-Guage = require 'guage'
+Gauges = require 'gauges'
 View = require 'view'
 
 class UsageBreakdown extends View
-
-  #
-  guages: []
 
   # builds the initial state of the component
   constructor : ($el, @data) ->
@@ -19,12 +16,14 @@ class UsageBreakdown extends View
 
     ## build component
 
-    # dynamically create guages for each metric
-    for k, v of @_getMetrics()
-      @guages.push new Guage $(".gauges", @$node), {title:k, data:v}
+    # dynamically create gauge for each metric
+    # for k, v of @_getDataByMetrics()
+    #   @gauge.push new Gauges $(".gauges", @$node), {title:k, data:v}
+
+    new Gauges $(".gauges", @$node), {data: @_getDataByMetrics()}
 
     # dynamically append table.thead headers for each metric
-    for k, v of @_getMetrics()
+    for k, v of @_getDataByMetrics()
       $("thead tr", @$table).append($("<td class='label'>#{k}</td>"))
 
     # dynamically append table.tbody column values for each metric to the "unused"
@@ -47,8 +46,8 @@ class UsageBreakdown extends View
                 </tr>")
 
       # dynamically append column values for each metric to the row
-      for k of @_getMetrics()
-        $row.append($("<td class='stat #{k}'>#{d.stats[k]*100}%</td>"))
+      for k of @_getDataByMetrics()
+        $row.append($("<td class='stat #{k}'>#{d.metrics[k]*100}%</td>"))
 
       # attach the new row
       $target.append($row)
@@ -58,20 +57,21 @@ class UsageBreakdown extends View
     $el.append @$node
     @fadeIn()
 
-  # update data will take data and update both guages and table data
+  # update data will take data and update both gauge and table data
   updateData : (data) ->
     @updateMetrics(data)
     @updateServices(data)
 
-  # update metrics takes data and updates each guages with the new values
+  # update metrics takes data and updates each gauge with the new values
   updateMetrics : (data) ->
-    g.update(data) for g in @guages
+    for g in @gauge
+      g.update(data)
 
   # update services takes data and updates the table with the new values
   updateServices : (data) ->
     for d in data
-      for k, v of @_getMetrics(data)
-        $("##{d.name} .#{k}", @$node).html("#{(d.stats[k]*100).toPrecision(2)}%")
+      for k, v of @_getDataByMetrics(data)
+        $("##{d.name} .#{k}", @$node).html("#{(d.metrics[k]*100).toPrecision(2)}%")
 
     #
     for k, v of @_calculateUnused(data)
@@ -89,15 +89,17 @@ class UsageBreakdown extends View
     # iterate over each set of data then each stat for that set, reducing each
     # value into a singe "total" value
     for d in data
-      for k, v of d.stats
+      for k, v of d.metrics
         totals[k] ||= 0
         totals[k] += v
 
     totals
 
+  {metric: "ram", data: [{}, {}]}
+
   # getMetrics iterates over data converting creating an alternate representation
   # of the data values aggregated by metrics
-  _getMetrics : (data = @data) ->
+  _getDataByMetrics : (data = @data) ->
 
     #
     metrics = {}
@@ -105,11 +107,12 @@ class UsageBreakdown extends View
     # iterate over each set of data then each stat for that set, creating a new
     # object that represents the data aggregated by metric
     for d in data
-      for k, v of d.stats
+      for k, v of d.metrics
         metrics[k] ||= []
-        metrics[k].push({type:d.type, value:v})
+        metrics[k].push {type:d.type, name: d.name, value:v}
 
-    metrics
+    # convert the metrics object into an array of data arranged by metrics
+    Object.keys(metrics).map (k) -> {metric: k, data: metrics[k]}
 
   # calculateUnused iterates over "total" data and calculates the remaining value
   # of 100 - total

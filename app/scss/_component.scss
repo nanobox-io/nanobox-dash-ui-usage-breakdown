@@ -7,32 +7,24 @@ $dark-gray  : #8593a6;
 
 //
 $service-colors: $red $blue $green blue green orange purple;
-$internal-colors: $dark-gray brown black;
+$internal-colors: $dark-gray brown red yellow;
 
 .component            {padding:15px; background:$white;
   h4.title            {text-align:center; font-style:italic; color:$blue;}
   .gauges             {display:flex; justify-content:space-around; width:100%; border-bottom:1px solid $dark-gray;
     .gauge            {
       .title          {fill:#8593a6; font-size:21px; text-transform:uppercase;}
-      g.used          {
-        path          {
 
-          // loop through each path.service assigning a service-color
-          &.service   {
-            @each $color in $service-colors {
-              $i : index($service-colors, $color);
-              &:nth-child(#{$i}) {fill: $color;}
-            }
-          }
+      // loop through each path.service assigning a service-color
+      @each $color in $service-colors {
+        $i : index($service-colors, $color);
+        .service:nth-of-type(#{$i}) {fill: $color;}
+      }
 
-          // loop through each path.internal assigning an internal-color
-          &.internal {
-            @each $color in $internal-colors {
-              $i : index($internal-colors, $color);
-              &:nth-child(#{$i}) {fill: $color;}
-            }
-          }
-        }
+      // loop through each path.internal assigning an internal-color
+      @each $color in $internal-colors {
+        $i : index($internal-colors, $color);
+        .internal:nth-of-type(#{$i}) {fill: $color;}
       }
     }
   }
