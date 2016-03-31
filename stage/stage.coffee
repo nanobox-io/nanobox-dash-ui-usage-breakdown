@@ -11,14 +11,14 @@ data = [
 app = new nanobox.UsageBreakdown $("body"), data
 
 #
-# setInterval () ->
-#
-#   data = [
-#     { type:"service",  name:"web1",     stats: {ram:((Math.random() * 0.50) + 0.05), cpu:((Math.random() * 0.50) + 0.05)}},
-#     { type:"service",  name:"db1",      stats: {ram:((Math.random() * 0.50) + 0.05), cpu:((Math.random() * 0.50) + 0.05)}},
-#     { type:"internal", name:"platform", stats: {ram:((Math.random() * 0.50) + 0.05), cpu:((Math.random() * 0.50) + 0.05)}},
-#     { type:"internal", name:"other",    stats: {ram:((Math.random() * 0.50) + 0.05), cpu:((Math.random() * 0.50) + 0.05)}},
-#   ]
-#
-#   app.updateData(data)
-# , 3000
+setInterval () ->
+
+  data = [
+    {type:"service",  name:"web1",     metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
+    {type:"service",  name:"db1",      metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
+    {type:"internal", name:"platform", metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
+    {type:"internal", name:"other",    metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
+  ]
+
+  app.updateData(data)
+, 3000

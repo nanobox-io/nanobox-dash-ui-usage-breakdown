@@ -1,107 +1,112 @@
 module.exports = class Gauges
 
   #
-  constructor : ($node, options = {}) ->
+  constructor : (node, options = {}) ->
 
-    # @$node        = $node[0]
-    @data         = options.data
-    @size         = 150
-    @width        = @size
-    @height       = @size
-    @outerRadius  = @size/2
-    @innerRadius  = @size/2.75
-    @transform    = "translate(#{@width/2}, #{@height/2}) rotate(-90)"
+    @$node       = node[0] # D3 likes actual DOM elements not jQuery DOM
+    data         = options.data
+    size         = 150
+    width        = size
+    height       = size
+    outerRadius  = size/2
+    innerRadius  = size/2.75
 
     # add unused?
-    # @data.push({type:"internal", value:.1})
+    # data.push({type:"internal", value:.1})
 
-    console.log "DATA!", @data
+    # create base svg ("stage")
+    @svg = d3.select(@$node)
+      .append("svg:svg")
+      .append("svg:g").attr(
+        class: "gauges"
+        transform:  "translate(#{0}, #{height/2})"
+      )
 
-    # pie layout function
-    @pie = d3.layout.pie()
+    # create a pie layout function
+    @pieFn = d3.layout.pie()
       .startAngle(0)
       .endAngle(Math.PI)
+      .padAngle(.025)
+      .sort(null)
       .value (d) -> d.value
 
-    # arc generator function
-    @arc = d3.svg.arc()
-      .innerRadius(@innerRadius)
-      .outerRadius(@outerRadius)
+    # create an arc generator function
+    @arcFn = d3.svg.arc()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius)
 
-    # base svg
-    @svg = d3.select($node[0])
-              .append("svg:svg")
-                # .datum(@data)
-                .attr(
-                  width  : 600
-                  height : 300
-                )
+    # gauge positions
+    posx = 0
 
+    # set pie layout and arc functions
+    pieFn = @pieFn
+    arcFn = @arcFn
 
-    # add title
-    # @svg.append("svg:text")
-    #   .text(options.title || 'TITLE')
-    #   .attr(
-    #     class : "title"
-    #     x : @width/2
-    #     y : @height/2 - 10
-    #     "text-anchor" : "middle"
-    #   )
+    # create each gauge
+    @svg.selectAll()
+      .data(data)
+      .enter().append("svg:g")
 
-    #
-    gauges = @svg.selectAll("g.gauge")
-      .data(@data)
-      .enter()
-        .append("svg:g")
+      # for each gauge add a label and then draw all paths
+      .each (d) ->
+
+        #
+        gauge = d3.select(@)
+
+        # position each gauge relative to others; right now the positioning is
+        # twice the width of a gauge away from each other, in other words - a gauges
+        # width inbetween each gauge
+        gauge.attr(
+          class: "gauge #{d.metric}"
+          transform:  "translate(#{posx}, 0)"
+        )
+        posx += width
+
+        # add gauge label
+        gauge.append("svg:text")
+          .text(d.metric)
           .attr(
-            class: "gauge"
-            # transform: @transform
+            class: "label"
+            x: (width/2)
+            y: (height/2) - 10
+            "text-anchor" : "middle"
+          )
+
+        # add metrics
+        gauge.selectAll("path")
+          .data(pieFn(d.data))
+          .enter()
+            .append("path")
+              .attr
+                class: (d) -> d.data.type
+                d: arcFn
+                transform: "translate(#{width/2}, #{height/2}) rotate(-90)"
+              .each (d) -> @_curAngle = d
+
+  #
+  update : (data) ->
+
+    # set pie layout and arc functions
+    pieFn = @pieFn
+    arcFn = @arcFn
+
+    @svg
+      .selectAll("g.gauge")
+        .data(data)
+
+        # for each gauge select all the paths and update each arc
+        .each (d) ->
+
+          # select each path
+          d3.select(@).selectAll("path")
+            .data(pieFn(d.data))
+
+            # no tween update
+            # .attr(d: arcFn)
+
+            # tween update
+            .transition().duration(500).attrTween("d", (newAngle) ->
+              i = d3.interpolate(@_curAngle, newAngle)
+              @_curAngle = i(0)
+              (t) -> arcFn i(t)
             )
-          .each (d) ->
-            d3.select(@).append("svg:text")
-              .text(d.metric)
-              .attr(
-                class : d.metric
-              )
-
-
-
-
-    #
-    # paths = gauges.selectAll("path")
-    #   .data(@pie)
-    #   .enter()
-    #     .append("path")
-    #       .attr
-    #         class: (d) ->
-    #           console.log "DATA??", d
-    #           d.data.type
-    #         d: @arc
-    #         transform: @transform
-    #       # .each (d) -> @_curAngle = d
-
-  #
-  # update : (data) ->
-  #   @pie.value (d) -> d.value
-  #   @svg.datum(data)
-  #       .selectAll("path")
-  #       .data(@pie)
-  #       .attr(
-  #         d: @arc
-  #         transform: @transform
-  #       )
-  #   paths.transition().duration(500).attrTween("d", @arcTween)
-
-  #
-  # arcTween : (newAngle) ->
-  #   console.log "ARC?", @_curAngle, newAngle
-  #   i = d3.interpolate(@_curAngle, newAngle)
-  #   @_curAngle = i(0)
-  #   (t) => arc i(t)
-
-  ## util
-
-  percToRad : (p) -> @degToRad @percToDeg(p)
-  degToRad  : (d) -> d * (Math.PI/180)
-  RadToDeg  : (r) -> r * (180/Math.PI)
-  percToDeg : (p) -> p * 360

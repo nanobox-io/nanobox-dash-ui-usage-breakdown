@@ -16,25 +16,20 @@ class UsageBreakdown extends View
 
     ## build component
 
-    # dynamically create gauge for each metric
-    # for k, v of @_getDataByMetrics()
-    #   @gauge.push new Gauges $(".gauges", @$node), {title:k, data:v}
-
-    new Gauges $(".gauges", @$node), {data: @_getDataByMetrics()}
+    # create gauges
+    @gauges = new Gauges $("#gauges", @$node), {data: @_getDataByMetrics()}
 
     # dynamically append table.thead headers for each metric
-    for k, v of @_getDataByMetrics()
-      $("thead tr", @$table).append($("<td class='label'>#{k}</td>"))
+    for m in @_getDataByMetrics()
+      $("thead tr", @$table).append($("<td class='label'>#{m.metric}</td>"))
 
-    # dynamically append table.tbody column values for each metric to the "unused"
-    # portion of the table
-    for k, v of @_calculateUnused()
-      $("tbody#unused tr", @$table).append($("<td class='stat #{k}'>#{(v*100).toPrecision(2)}%</td>"))
+    # add unused data to the dataset
+    @data.push {type: "internal", name: "unused", metrics: @_calculateUnused()}
 
     # iterate through each data point and attach a "tr" for each piece of data;
     # the "tr" will be attached to either a "services" or "internal" table.tbody
     # depending on what type of data it is
-    for d in @data
+    for d, i in @data
 
       # determine the target attach point for the new row
       $target = if d.type == "service" then $("tbody#services", @$table) else $("tbody#internals", @$table)
@@ -46,8 +41,8 @@ class UsageBreakdown extends View
                 </tr>")
 
       # dynamically append column values for each metric to the row
-      for k of @_getDataByMetrics()
-        $row.append($("<td class='stat #{k}'>#{d.metrics[k]*100}%</td>"))
+      for m in @_getDataByMetrics()
+        $row.append($("<td class='stat #{m.metric}'>#{m.data[i].value*100}%</td>"))
 
       # attach the new row
       $target.append($row)
@@ -63,39 +58,19 @@ class UsageBreakdown extends View
     @updateServices(data)
 
   # update metrics takes data and updates each gauge with the new values
-  updateMetrics : (data) ->
-    for g in @gauge
-      g.update(data)
+  updateMetrics : (data) -> @gauges.update(@_getDataByMetrics(data))
 
   # update services takes data and updates the table with the new values
   updateServices : (data) ->
-    for d in data
-      for k, v of @_getDataByMetrics(data)
-        $("##{d.name} .#{k}", @$node).html("#{(d.metrics[k]*100).toPrecision(2)}%")
 
-    #
-    for k, v of @_calculateUnused(data)
-      $("tbody#unused .#{k}", @$table).html("#{(v*100).toPrecision(2)}%")
+    # add unused data to the dataset
+    data.push {type: "internal", name: "unused", metrics: @_calculateUnused(data)}
+
+    for d, i in data
+      for m in @_getDataByMetrics(data)
+        $("##{d.name} .#{m.metric}", @$node).html("#{(m.data[i].value*100).toPrecision(2)}%")
 
   ##
-
-  # getTotals iterates over data reducing each value for each metric down to a
-  # "total value"
-  _getTotals : (data = @data) ->
-
-    #
-    totals = {}
-
-    # iterate over each set of data then each stat for that set, reducing each
-    # value into a singe "total" value
-    for d in data
-      for k, v of d.metrics
-        totals[k] ||= 0
-        totals[k] += v
-
-    totals
-
-  {metric: "ram", data: [{}, {}]}
 
   # getMetrics iterates over data converting creating an alternate representation
   # of the data values aggregated by metrics
@@ -111,14 +86,33 @@ class UsageBreakdown extends View
         metrics[k] ||= []
         metrics[k].push {type:d.type, name: d.name, value:v}
 
+    # calculate and add unused data (this should ensure it's always the last thing added)
+    for k, v of @_calculateUnused(data)
+      metrics[k].push {type:"internal", name:"unused", value: v}
+
     # convert the metrics object into an array of data arranged by metrics
     Object.keys(metrics).map (k) -> {metric: k, data: metrics[k]}
 
-  # calculateUnused iterates over "total" data and calculates the remaining value
-  # of 100 - total
+  # calculateUnused first iterates over data aggregating all values into a "total"
+  # it then iterates over each total and calculates the remaining value of
+  # 100% - total (1 - total)
   _calculateUnused : (data = @data) ->
+
+    #
+    totals = {}
     unused = {}
-    unused[k] = (1 - v) for k, v of @_getTotals(data)
+
+    # iterate over each set of data then each stat for that set, reducing each
+    # value into a singe "total" value
+    for d in data
+      for k, v of d.metrics
+        totals[k] ||= 0
+        totals[k] += v
+
+    # iterate over each total calculating the remaining out of 100% (1)
+    unused[k] = (1 - v) for k, v of totals
+
+    # return the unused
     unused
 
 #
