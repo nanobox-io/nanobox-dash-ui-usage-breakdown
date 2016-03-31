@@ -27,6 +27,8 @@ usemin       = require 'gulp-usemin'
 watch        = require 'gulp-watch'
 wrap         = require 'gulp-wrap'
 
+# 
+jadeTargetDir     = './server/js/jade'
 
 # Paths to source files
 
