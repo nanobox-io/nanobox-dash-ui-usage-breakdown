@@ -1,26 +1,21 @@
 module.exports = class Gauges
 
   #
-  constructor : (node, options = {}) ->
+  constructor : ($node, options = {}) ->
 
-    @$node       = node[0] # D3 likes actual DOM elements not jQuery DOM
+    #
+    self = @
+
+    #
+    @$node       = $node[0] # D3 likes actual DOM elements not jQuery DOM
     data         = options.data
-    size         = 150
+    size         = options.size || 150
+
+    #
     width        = size
     height       = size
     outerRadius  = size/2
     innerRadius  = size/2.75
-
-    # add unused?
-    # data.push({type:"internal", value:.1})
-
-    # create base svg ("stage")
-    @svg = d3.select(@$node)
-      .append("svg:svg")
-      .append("svg:g").attr(
-        class: "gauges"
-        transform:  "translate(#{0}, #{height/2})"
-      )
 
     # create a pie layout function
     @pieFn = d3.layout.pie()
@@ -35,78 +30,73 @@ module.exports = class Gauges
       .innerRadius(innerRadius)
       .outerRadius(outerRadius)
 
+    # create base svg ("stage")
+    @svg = d3.select(@$node)
+      .append("svg:svg")
+      .append("svg:g")
+        .attr
+          class: "gauges"
+          transform:  "translate(#{0}, #{height/2})"
+
     # gauge positions
     posx = 0
 
-    # set pie layout and arc functions
-    pieFn = @pieFn
-    arcFn = @arcFn
-
     # create each gauge
-    @svg.selectAll()
-      .data(data)
-      .enter().append("svg:g")
+    gauges = @svg.selectAll().data(data).enter().append("svg:g")
 
-      # for each gauge add a label and then draw all paths
-      .each (d) ->
+    # for each gauge add a label and then draw all paths
+    gauges.each (d) ->
 
-        #
-        gauge = d3.select(@)
+      #
+      gauge = d3.select(@)
 
-        # position each gauge relative to others; right now the positioning is
-        # twice the width of a gauge away from each other, in other words - a gauges
-        # width inbetween each gauge
-        gauge.attr(
-          class: "gauge #{d.metric}"
-          transform:  "translate(#{posx}, 0)"
-        )
-        posx += width
+      # position each gauge relative to others; right now the positioning is
+      # twice the width of a gauge away from each other, in other words - a gauges
+      # width inbetween each gauge
+      gauge.attr
+        class: "gauge #{d.metric}"
+        transform:  "translate(#{posx}, 0)"
 
-        # add gauge label
-        gauge.append("svg:text")
-          .text(d.metric)
-          .attr(
-            class: "label"
-            x: (width/2)
-            y: (height/2) - 10
-            "text-anchor" : "middle"
-          )
+      #
+      posx += width
 
-        # add metrics
-        gauge.selectAll("path")
-          .data(pieFn(d.data))
-          .enter()
-            .append("path")
-              .attr
-                class: (d) -> d.data.type
-                d: arcFn
-                transform: "translate(#{width/2}, #{height/2}) rotate(-90)"
-              .each (d) -> @_curAngle = d
+      # add gauge label
+      gauge.append("svg:text")
+        .text(d.metric)
+        .attr
+          class: "label"
+          x: (width/2)
+          y: (height/2) - 10
+          "text-anchor" : "middle"
+
+      # add metrics
+      gauge.selectAll("path").data(self.pieFn(d.data))
+        .enter()
+          .append("path")
+            .attr
+              class: (d) -> d.data.type
+              d: self.arcFn
+              transform: "translate(#{width/2}, #{height/2}) rotate(-90)"
+            .each (d) -> @_curAngle = d
 
   #
-  update : (data) ->
+  update : (data = @data) ->
 
-    # set pie layout and arc functions
-    pieFn = @pieFn
-    arcFn = @arcFn
+    #
+    self = @
 
-    @svg
-      .selectAll("g.gauge")
-        .data(data)
+    # for each gauge select all the paths and update each arc
+    @svg.selectAll("g.gauge").data(data).each (d) ->
 
-        # for each gauge select all the paths and update each arc
-        .each (d) ->
+      # select each path
+      d3.select(@).selectAll("path").data(self.pieFn(d.data))
 
-          # select each path
-          d3.select(@).selectAll("path")
-            .data(pieFn(d.data))
+        # no tween update
+        # .attr(d: arcFn)
 
-            # no tween update
-            # .attr(d: arcFn)
-
-            # tween update
-            .transition().duration(500).attrTween("d", (newAngle) ->
-              i = d3.interpolate(@_curAngle, newAngle)
-              @_curAngle = i(0)
-              (t) -> arcFn i(t)
-            )
+        # tween update
+        .transition().duration(500).attrTween("d", (newAngle) ->
+          i = d3.interpolate(@_curAngle, newAngle)
+          @_curAngle = i(0)
+          (t) -> self.arcFn i(t)
+        )

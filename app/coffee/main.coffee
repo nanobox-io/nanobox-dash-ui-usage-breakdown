@@ -53,7 +53,7 @@ class UsageBreakdown extends View
     @fadeIn()
 
   # update data will take data and update both gauge and table data
-  updateData : (data) ->
+  update : (data) ->
     @updateMetrics(data)
     @updateServices(data)
 

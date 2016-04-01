@@ -1,24 +1,22 @@
 
 #
-data = [
-  {type:"service",  name:"web1",     metrics: {ram:.30, cpu:.25}},
-  {type:"service",  name:"db1",      metrics: {ram:.20, cpu:.25}},
-  {type:"internal", name:"platform", metrics: {ram:.10, cpu:.10}},
-  {type:"internal", name:"other",    metrics: {ram:.10, cpu:.10}}
-]
+genData = () ->
+    data = []
+
+    #
+    for service in ["web1", "db1"]
+      data.push {type:"service",  name:service, metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}}
+
+    #
+    for service in ["platform", "other"]
+      data.push {type:"internal",  name:service, metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}}
+
+    data
 
 #
-app = new nanobox.UsageBreakdown $("body"), data
+app = new nanobox.UsageBreakdown $("body"), genData()
 
 #
 setInterval () ->
-
-  data = [
-    {type:"service",  name:"web1",     metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
-    {type:"service",  name:"db1",      metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
-    {type:"internal", name:"platform", metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
-    {type:"internal", name:"other",    metrics: {ram:((Math.random() * 0.25) + 0.05), cpu:((Math.random() * 0.25) + 0.05)}},
-  ]
-
-  app.updateData(data)
+  app.update(genData())
 , 3000

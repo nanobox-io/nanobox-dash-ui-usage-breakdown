@@ -11,7 +11,7 @@ $internal-colors: $dark-gray brown red yellow;
 
 .component            {padding:15px; background:$white;
   h4.title            {text-align:center; font-style:italic; color:$blue;}
-  #gauges             {display:flex; justify-content:space-around; width:100%; border-bottom:1px solid $dark-gray;
+  #gauges             {display:flex; width:100%; border-bottom:1px solid $dark-gray;
     .gauge            {
       .label          {fill:#8593a6; font-size:21px; text-transform:uppercase;}
 
