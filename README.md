@@ -2,10 +2,11 @@
 ```coffeescript
 
 # initialize
-app = new nanobox.UsageBreakdown $("body"), data
+usage = new nanobox.UsageBreakdown $("body")
+usage.build()
 
 # update
-app.update(data)
+usage.update(data)
 ```
 
 ## Data structure
