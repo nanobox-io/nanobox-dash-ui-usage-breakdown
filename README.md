@@ -9,7 +9,7 @@ usage.build()
 usage.update(data)
 ```
 
-## Data structure
+## Data structures
 The data structure is an array of "service objects"
 
 ##### Single Service Object
@@ -17,13 +17,37 @@ The data structure is an array of "service objects"
 {type:"service", name:"web1", metrics: {ram:.30, cpu:.25}}
 ```
 
-##### Full Data Structure (array of time objects)
+##### Data by service structure (array of service objects)
 ```coffeescript
 data = [
   {type:"service",  name:"web1",     metrics: {ram:.30, cpu:.25}},
   {type:"service",  name:"db1",      metrics: {ram:.20, cpu:.25}},
   {type:"internal", name:"platform", metrics: {ram:.10, cpu:.10}},
   {type:"internal", name:"other",    metrics: {ram:.10, cpu:.10}}
+]
+```
+
+##### Data by metric structure
+``` coffeescript
+data = [
+  {
+    metric: "ram",
+    data: [
+      {type:"service",  name:"web1",     value:.30},
+      {type:"service",  name:"db1",      value:.20},
+      {type:"internal", name:"platform", value:.10},
+      {type:"internal", name:"system",   value:.10}
+    ]
+  },
+  {
+    metric: "cpu",
+    data: [
+      {type:"service",  name:"web1",     value:.25},
+      {type:"service",  name:"db1",      value:.25},
+      {type:"internal", name:"platform", value:.10},
+      {type:"internal", name:"system",   value:.10}
+   ]
+  }
 ]
 ```
 

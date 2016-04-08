@@ -13,20 +13,24 @@ class UsageBreakdown
     @build()
 
   #
-  build : () -> @_subscribeToUsageBreakdownData(@id)
+  build : () ->
+
+    #
+    @$gauges = $(".gauges", @$node)
+    @$table = $("table.services", @$node)
+
+    #
+    @_subscribeToUsageBreakdownData(@id)
 
   # update will take a set of data and build the component if it's the first data
   # received, or update the component if it's new data
   update : (data) =>
 
-    @$gauges = $("#gauges", @$node)
-    @$table = $("table.services", @$node)
-
     # if the guages have already exist update them, otherwise build them
     if $("svg", @$gauges).length then @_updateGauges(data) else @_buildGauges(data)
 
-    # if the table already exists update date it, otherwise build it
-    if $("tbody#services", @$table).length then @_updateTable(data) else @_buildTable(data)
+    # if the table's already been built update date it, otherwise build it
+    if $("tbody.stats", @$table).children().length then @_updateTable(data) else @_buildTable(data)
 
   #
   _buildGauges : (data) -> @gauges = new Gauges @$gauges, {data: @_getDataByMetrics(data)}
@@ -34,40 +38,30 @@ class UsageBreakdown
   #
   _buildTable : (data) ->
 
-    #
-    @$services = $("<tbody id='services' class='stats'></tbody>")
-    @$internals = $("<tbody id='internals' class='stats'></tbody>")
-
     # dynamically append table.thead headers for each metric
     for m in @_getDataByMetrics(data)
-      $("thead tr", @$table).append($("<td class='label'>#{m.metric}</td>"))
+      $("thead tr", @$table).append($("<th class='label'>#{m.metric}</td>"))
 
     # add unused data to the dataset
     data.push {type: "internal", name: "unused", metrics: @_calculateUnused(data)}
-
-    #
-    @$table.append(@$services, @$internals)
 
     # iterate through each data point and attach a "tr" for each piece of data;
     # the "tr" will be attached to either a "services" or "internal" table.tbody
     # depending on what type of data it is
     for d, i in data
 
-      # determine the target attach point each new row
-      $target = if d.type == "service" then @$services else @$internals
-
       # create a new row
-      $row = $("<tr id='#{d.name}'>
+      $row = $("<tr class='#{d.name}'>
                   <td class='icon'>#{'icon'}</td>
                   <td class='stat name'>#{d.name}</td>
                 </tr>")
 
       # dynamically append column values for each metric to the row
       for m in @_getDataByMetrics(data)
-        $row.append($("<td class='stat #{m.metric}'>#{m.data[i].value*100}%</td>"))
+        $row.append($("<td class='stat metric #{m.metric}'>#{m.data[i].value*100}%</td>"))
 
       # attach the new row
-      $target.append($row)
+      $("tbody", @$table).append($row)
 
   # update metrics takes data and updates each gauge with the new values
   _updateGauges : (data) -> @gauges.update(@_getDataByMetrics(data))
@@ -78,10 +72,10 @@ class UsageBreakdown
     # add unused data to the dataset
     data.push {type: "internal", name: "unused", metrics: @_calculateUnused(data)}
 
-    # 
+    #
     for d, i in data
       for m in @_getDataByMetrics(data)
-        $("##{d.name} .#{m.metric}", @$node).html("#{(m.data[i].value*100).toPrecision(2)}%")
+        $(".#{d.name} .#{m.metric}", @$node).html("#{(m.data[i].value*100).toPrecision(2)}%")
 
   #
   _subscribeToUsageBreakdownData : (id) ->
