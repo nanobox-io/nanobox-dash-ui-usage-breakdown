@@ -17,7 +17,10 @@ module.exports = class TestData
   waitForData : (data) ->
     data.callback usageBreakdownDataSimulator.generateUsageBreakdownNoData()
     setInterval () ->
-      data.callback usageBreakdownDataSimulator.generateUsageBreakdownData()
+
+      # disable updates by default
+      if window.enableUpdates
+        data.callback usageBreakdownDataSimulator.generateUsageBreakdownData()
     , 5000
 
   #
