@@ -31,52 +31,56 @@ $service-colors: $color1, $color2, $color3, $color4, $color5, $color6, $color7, 
 .nanobox-dash-ui-usage-breakdown {
 
   //
-  .gauges             {display:flex; width:100%; border-bottom:1px solid $dark-gray;
-    .gauge            {
-      .label          {fill:$dark-gray; font-size:21px; text-transform:uppercase;}
+  .component            {
 
-      // loop through each path.service assigning a service-color
-      @each $color in $service-colors {
-        $i : index($service-colors, $color);
-        .service:nth-of-type(#{$i}) {fill: $color;}
-      }
+    //
+    .gauges             {display:flex; width:100%; border-bottom:1px solid $dark-gray;
+      .gauge            {
+        .label          {fill:$dark-gray; font-size:21px; text-transform:uppercase;}
 
-      //
-      .internal    {
-        &.platform {fill: $platform-color;}
-        &.system   {fill: $system-color;}
-        &.unused   {fill: $unused-color;}
-      }
-    }
-  }
+        // loop through each path.service assigning a service-color
+        @each $color in $service-colors {
+          $i : index($service-colors, $color);
+          .service:nth-of-type(#{$i}) {fill: $color;}
+        }
 
-  //
-  table.services   {width:100%; margin-top:25px; border-spacing:0px 5px;
-    tr td          {padding:3px 0px;}
-
-    thead.labels   {
-      tr           {th.label {width:20%; color:$dark-gray; text-transform:uppercase;}}
-    }
-
-    tbody.stats    {
-      tr           {width:100%;
-        td.icon    {width:10%; text-align:center;}
-        td.stat    {width:0px; background:$dark-gray; color:$white;
-          &.name   {padding-left:21px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-          &.metric {text-align:center;}
+        //
+        .internal       {
+          &.platform    {fill: $platform-color;}
+          &.system      {fill: $system-color;}
+          &.unused      {fill: $unused-color;}
         }
       }
+    }
 
-      // loop through each "service" assigning a service-color
-      @each $color in $service-colors {
-        $i : index($service-colors, $color);
-        tr:nth-child(#{$i}) {td.stat {background: $color;}}
+    //
+    table.services      {width:100%; margin-top:25px; border-spacing:0px 5px;
+      tr td             {padding:3px 0px;}
+
+      thead.labels      {
+        tr              {th.label {width:20%; color:$dark-gray; text-transform:uppercase;}}
       }
 
-      //
-      tr.platform {td.stat {background: $platform-color;}}
-      tr.system   {td.stat {background: $system-color; color:$dark-gray;}}
-      tr.unused   {td.stat {background: $unused-color; color:$dark-gray;}}
+      tbody.stats       {
+        tr              {width:100%;
+          td.icon       {width:10%; text-align:center;}
+          td.stat       {width:0px; background:$dark-gray; color:$white;
+            &.name      {padding-left:21px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+            &.metric    {text-align:center;}
+          }
+        }
+
+        // loop through each "service" assigning a service-color
+        @each $color in $service-colors {
+          $i : index($service-colors, $color);
+          tr:nth-child(#{$i}) {td.stat {background: $color;}}
+        }
+
+        //
+        tr.platform     {td.stat {background: $platform-color;}}
+        tr.system       {td.stat {background: $system-color; color:$dark-gray;}}
+        tr.unused       {td.stat {background: $unused-color; color:$dark-gray;}}
+      }
     }
   }
 }
