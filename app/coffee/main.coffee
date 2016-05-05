@@ -4,12 +4,13 @@ Gauges = require 'gauges'
 class UsageBreakdown
 
   # builds the initial state of the component
-  constructor : ($el, @id) ->
+  constructor : ($el, @options) ->
 
     # set the jade template for the component and get some reusable elements
-    @$node  = $ component()
+    @$node = $ component()
     $el.append @$node
 
+    #
     @build()
 
   #
@@ -20,7 +21,7 @@ class UsageBreakdown
     @$table = $("table.services", @$node)
 
     #
-    @_subscribeToUsageBreakdownData(@id)
+    @_subscribeToUsageBreakdownData(@options.id)
 
   # update will take a set of data and build the component if it's the first data
   # received, or update the component if it's new data
