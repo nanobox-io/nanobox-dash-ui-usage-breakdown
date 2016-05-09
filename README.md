@@ -9,6 +9,13 @@ usage.build()
 usage.update(data)
 ```
 
+#### Options
+| Option=default | Description |
+|---|---|
+| logsEnabled=false | Is logging enabled (T/F) |
+| logLevel="INFO" | Selected log level of [available levels](https://github.com/sdomino/dash/blob/master/src/dash.coffee#L8) |
+| id="" | The `id` of the service the component belongs to |
+
 ## Data structures
 The data structure is an array of "service objects"
 
