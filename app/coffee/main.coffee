@@ -2,17 +2,19 @@ component = require 'jade/component'
 Gauges = require 'gauges'
 statRow = require 'jade/stats-row'
 
+#
 class UsageBreakdown
 
   # builds the initial state of the component
   constructor : ($el, @options={}) ->
 
+    # default options
+    if !@options.logsEnabled then @options.logsEnabled = false
+    if !@options.loglevel then @options.logLevel = "INFO"
+
     # set the jade template for the component and get some reusable elements
     @$node = $ component()
     $el.append @$node
-
-    #
-    @build()
 
   #
   build : () ->
