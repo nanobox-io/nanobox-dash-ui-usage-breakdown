@@ -1,0 +1,8 @@
+tr(class="#{name}")
+  td.icon
+    if kind != undefined
+      .icon-wrap
+        img.shadow-icon(data-src="hex-#{kind}" scalable="true")
+  td.stat.name= name
+  each row in rows
+    td.stat.metric(class="#{row.metric}") #{row.val}%

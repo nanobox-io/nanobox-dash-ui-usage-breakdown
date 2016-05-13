@@ -8,11 +8,11 @@ module.exports = class Gauges
 
     #
     @$node       = $node[0] # D3 likes actual DOM elements not jQuery DOM
-    size         = 150
+    size         = 135
     @width       = size
     @height      = size
     outerRadius  = size/2
-    innerRadius  = size/2.75
+    innerRadius  = size/2.7
 
     # create a pie layout function
     @pieFn = d3.layout.pie()
@@ -59,7 +59,7 @@ module.exports = class Gauges
         # width inbetween each gauge
         gauge.attr
           class: "gauge #{d.metric}"
-          transform:  "translate(#{self.width*i}, 0)"
+          transform:  "translate(#{self.width*i + i*15 + 5}, 0)"
 
         # add gauge label
         gauge.append("svg:text")

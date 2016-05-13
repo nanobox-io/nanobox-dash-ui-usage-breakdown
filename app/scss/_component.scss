@@ -1,81 +1,94 @@
-$white      : #ffffff;
-$dark-gray  : #6B758A;
+$white        : #ffffff;
+$dark-gray    : #6B758A;
+$system-txt   : #273F45;
+$lighter-txt  : #769AA8;
 
 // Services
-$color1         : #696969;
-$color2         : #2AA5D7;
-$color3         : #B0B0B0;
-$color4         : #F07F7F;
-$color5         : #61D5D6;
-$color6         : #A6CC51;
+$color1         : #1785A7;
+$color2         : #1CADE8;
+$color3         : #576B6F;
+$color4         : #76C163;
+$color5         : #0E5669;
+$color6         : #B0B0B0;
 $color7         : #B36558;
-$color8         : #D9B4A1;
+$color8         : #6C9DA1;
 $color9         : #5E8CB0;
-$color10        : #EDA461;
-$color11        : #8F2400;
-$color12        : #EBD700;
+$color10        : #8A5C3F;
+$color11        : #652F63;
+$color12        : #D9B4A1;
 
 // Internal
-$platform-color : #5AB8A1;
-$system-color   : #C5E1E8;
-$unused-color   : #EDEDED;
+$platform-color : #6FDBC2;
+$system-color   : #B9D1D7;
+$unused-color   : #E9F0F1;
 
 //
 $service-colors: $color1, $color2, $color3, $color4, $color5, $color6, $color7, $color8, $color9, $color10, $color11, $color12;
 
 //
-.nanobox-dash-ui-usage-breakdown {
+.nanobox-dash-ui-usage-breakdown        {
 
   //
-  .component            {
+  .component                            {
 
     //
-    .gauges             {display:flex; width:100%; border-bottom:1px solid $dark-gray;
-      .gauge            {
-        .label          {fill:$dark-gray; font-size:21px; text-transform:uppercase;}
+    .gauges                             { display:flex; width:100%; border-bottom:1px solid #E7EDF1;
+      svg                               { margin-bottom:-2px; border:none;}
+      .gauge                            {
+        .label                          { fill:$lighter-txt; font-size:21px; text-transform:uppercase;}
 
         // loop through each path.service assigning a service-color
         @each $color in $service-colors {
           $i : index($service-colors, $color);
-          .service:nth-of-type(#{$i}) {fill: $color;}
+          .service:nth-of-type(#{$i})   { fill: $color;}
         }
 
         //
-        .internal       {
-          &.platform    {fill: $platform-color;}
-          &.system      {fill: $system-color;}
-          &.unused      {fill: $unused-color;}
+        .internal                       {
+          &.platform                    { fill: $platform-color;}
+          &.system                      { fill: $system-color;}
+          &.unused                      { fill: $unused-color;}
         }
       }
     }
 
     //
-    table.services      {width:100%; margin-top:25px; border-spacing:0px 5px;
-      tr td             {padding:3px 0px;}
+    table.services                      { width:100%; margin-top:25px; border-spacing:0px 5px;
+      tr td                             { padding:3px 0px;}
 
-      thead.labels      {
-        tr              {th.label {width:20%; color:$dark-gray; text-transform:uppercase;}}
+      thead.labels                      {
+        tr                              {
+          th.label                      { font-size:13px; width:20%; color:$dark-gray; text-transform:uppercase;}
+        }
       }
 
-      tbody.stats       {
-        tr              {width:100%;
-          td.icon       {width:10%; text-align:center;}
-          td.stat       {width:0px; background:$dark-gray; color:$white;
-            &.name      {padding-left:21px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-            &.metric    {text-align:center;}
+      tbody.stats                       { font-size:13px;
+        tr                              { width:100%;
+          td.icon                       { width:42px; text-align:center; position:relative;
+            .icon-wrap                  { width: 29px; position:absolute; top:-7px; }
+            svg {
+              > g                       { transform: translateY(3px); }
+              .bg                       { stroke: white; stroke-width:4px;  }
+            }
+          }
+          td.stat                       { width:0px; background:$dark-gray; color:$white;
+            &.name                      { padding-left:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+            &.metric                    { text-align:center;}
           }
         }
 
         // loop through each "service" assigning a service-color
         @each $color in $service-colors {
           $i : index($service-colors, $color);
-          tr:nth-child(#{$i}) {td.stat {background: $color;}}
+          tr:nth-child(#{$i})           { td.stat {background: $color;}}
         }
 
         //
-        tr.platform     {td.stat {background: $platform-color;}}
-        tr.system       {td.stat {background: $system-color; color:$dark-gray;}}
-        tr.unused       {td.stat {background: $unused-color; color:$dark-gray;}}
+        tr.platform                     { td.stat {background: $platform-color; color: $system-txt;}}
+        tr.system                       { td.stat {background: $system-color; color:$system-txt;}}
+        tr.free                         { td.stat {background: $unused-color; color:$system-txt; font-style:italic; color:rgba($system-txt, 0.5);
+          &.name:after {content:" (unused)"}
+        }}
       }
     }
   }

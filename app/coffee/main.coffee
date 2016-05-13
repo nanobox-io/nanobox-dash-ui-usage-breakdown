@@ -1,5 +1,6 @@
 component = require 'jade/component'
 Gauges = require 'gauges'
+statRow = require 'jade/stats-row'
 
 class UsageBreakdown
 
@@ -44,25 +45,25 @@ class UsageBreakdown
       $("thead tr", @$table).append($("<th class='label'>#{m.metric}</td>"))
 
     # add unused data to the dataset
-    data.push {type: "internal", name: "unused", metrics: @_calculateUnused(data)}
+    data.push {type: "internal", name: "free", metrics: @_calculateUnused(data)}
 
     # iterate through each data point and attach a "tr" for each piece of data;
     # the "tr" will be attached to either a "services" or "internal" table.tbody
     # depending on what type of data it is
     for d, i in data
 
-      # create a new row
-      $row = $("<tr class='#{d.name}'>
-                  <td class='icon'>#{'icon'}</td>
-                  <td class='stat name'>#{d.name}</td>
-                </tr>")
-
-      # dynamically append column values for each metric to the row
+      rows = []
+      # grab the column values for each metric
       for m in @_getDataByMetrics(data)
-        $row.append($("<td class='stat metric #{m.metric}'>#{m.data[i].value*100}%</td>"))
+        rows.push {metric: m.metric, val:m.data[i].value*100 }
+
+      # create a new row
+      $row = $ statRow( {name:d.name, kind:d.kind, rows:rows} )
 
       # attach the new row
       $("tbody", @$table).append($row)
+
+    castShadows $("tbody", @$table)
 
   # update metrics takes data and updates each gauge with the new values
   _updateGauges : (data) -> @gauges.update(@_getDataByMetrics(data))
@@ -71,7 +72,7 @@ class UsageBreakdown
   _updateTable : (data) ->
 
     # add unused data to the dataset
-    data.push {type: "internal", name: "unused", metrics: @_calculateUnused(data)}
+    data.push {type: "internal", name: "free", metrics: @_calculateUnused(data)}
 
     #
     for d, i in data
