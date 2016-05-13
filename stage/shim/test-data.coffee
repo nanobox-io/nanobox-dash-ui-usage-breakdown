@@ -13,7 +13,7 @@ module.exports = class TestData
   #
   constructor: () ->
     @createFakeStatDataProvider()
-    window.enableUpdates = true
+    # window.enableUpdates = true
   #
   createFakeStatDataProvider : ()->
     PubSub.subscribe 'STATS.SUBSCRIBE.USAGE_BREAKDOWN', (m, data) =>
@@ -27,8 +27,8 @@ module.exports = class TestData
     setTimeout () ->
 
       # disable updates by default
-      if window.enableUpdates
-        data.callback usageBreakdownDataSimulator.generateUsageBreakdownData()
+      # if window.enableUpdates
+      data.callback usageBreakdownDataSimulator.generateUsageBreakdownData()
     , 200
 
   #
