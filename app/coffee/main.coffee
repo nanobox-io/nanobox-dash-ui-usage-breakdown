@@ -4,7 +4,7 @@ Gauges = require 'gauges'
 class UsageBreakdown
 
   # builds the initial state of the component
-  constructor : ($el, @options) ->
+  constructor : ($el, @options={}) ->
 
     # set the jade template for the component and get some reusable elements
     @$node = $ component()
