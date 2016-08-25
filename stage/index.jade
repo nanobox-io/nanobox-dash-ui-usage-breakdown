@@ -16,18 +16,20 @@ html(lang="en")
   body
 
     // build:remove 
-    script(src="bower-libs/jquery/dist/jquery.js")
-    script(src="bower-libs/jade/runtime.js")
-    script(src="bower-libs/PubSubJS/src/pubsub.js")
-    script(src="js/shared-svg.js")
-    script(src="bower-libs/shadow-icons/rel/app.js")
     script(src="bower-libs/d3/d3.min.js")
+    script(src="bower-libs/jade/runtime.js")
+    script(src="bower-libs/jquery/dist/jquery.js")
+    script(src="bower-libs/PubSubJS/src/pubsub.js")
+    script(src="bower-libs/shadow-icons/rel/app.js")
+    
+    //-
     script(src="https://use.typekit.net/cqd5kth.js")
+    script(type="text/javascript") try{Typekit.load({ async: true });}catch(e){}
+    
+    //- 
+    script(src="http://localhost:35729/livereload.js")
     // endbuild
       
-    //- 
-    script(type="text/javascript") try{Typekit.load({ async: true });}catch(e){}
-
     // build:js app.js
     script(src="js/main.js")
     // endbuild
@@ -37,9 +39,9 @@ html(lang="en")
     script(src="stage/js/stage.js")
     // endbuild
     
+    // build:remove 
+    script(src="js/shared-svg.js")
+    // endbuild
+    
     script(type="text/javascript").
       init();
-    
-    // build:remove 
-    script(src="http://localhost:35729/livereload.js")
-    // endbuild

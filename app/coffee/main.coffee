@@ -2,17 +2,19 @@ component = require 'jade/component'
 Gauges = require 'gauges'
 statRow = require 'jade/stats-row'
 
+#
 class UsageBreakdown
 
   # builds the initial state of the component
   constructor : ($el, @options={}) ->
 
+    # default options
+    if !@options.logsEnabled then @options.logsEnabled = false
+    if !@options.loglevel then @options.logLevel = "INFO"
+
     # set the jade template for the component and get some reusable elements
     @$node = $ component()
     $el.append @$node
-
-    #
-    @build()
 
   #
   build : () ->
@@ -31,7 +33,7 @@ class UsageBreakdown
     # if the guages have already exist update them, otherwise build them
     if $("svg", @$gauges).length then @_updateGauges(data) else @_buildGauges(data)
 
-    # if the table's already been built update date it, otherwise build it
+    # if the table's already been built update it, otherwise build it
     if $("tbody.stats", @$table).children().length then @_updateTable(data) else @_buildTable(data)
 
   #
@@ -52,8 +54,8 @@ class UsageBreakdown
     # depending on what type of data it is
     for d, i in data
 
-      rows = []
       # grab the column values for each metric
+      rows = []
       for m in @_getDataByMetrics(data)
         rows.push {metric: m.metric, val:m.data[i].value*100 }
 
@@ -63,6 +65,7 @@ class UsageBreakdown
       # attach the new row
       $("tbody", @$table).append($row)
 
+    #
     castShadows $("tbody", @$table)
 
   # update metrics takes data and updates each gauge with the new values
@@ -86,8 +89,8 @@ class UsageBreakdown
       callback       : @update
     }
 
-  # getMetrics iterates over data converting creating an alternate representation
-  # of the data values aggregated by metrics
+  # getMetrics iterates over data creating an alternate representation of the data
+  # values aggregated by metrics
   _getDataByMetrics : (data) ->
 
     #
