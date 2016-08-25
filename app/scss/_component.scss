@@ -69,7 +69,7 @@ $service-colors                                         : $color1, $color2, $col
               .bg                       { stroke: white; stroke-width:4px;  }
             }
           }
-          td.stat                       { width:0px; background:#D5D5D5; color:#282E3C;
+          td.stat                       { width:0px; background:#D8E0E6; color:#282E3C;
             &.name                      { padding-left:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:white;}
             &.metric                    { text-align:center;}
           }
