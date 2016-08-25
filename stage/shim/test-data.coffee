@@ -1,10 +1,10 @@
 module.exports = class TestData
 
   services  : [
-    {name:"web1", kind:"ruby"}, {name:"web2", kind:"node"}, {name:"web3", kind:"python"}, {name:"web4", kind:"java"}, {name:"web5", kind:"php"}, {name:"db1", kind:"maria-db"}, {name:"db2", kind:"postgres-db"}, {name:"db3", kind:"couch-db"}, {name:"db4", kind:"percona-db"}, {name:"storage", kind:"storage"}, {name:"db-8", kind:"redis"}, {name:"customers", kind:"default-db"}, {name:"admin", kind:"default"}
+    {name:"web1", kind:"ruby"}, {name:"web2", kind:"node"}, {name:"web3", kind:"python"}, {name:"web4", kind:"java"}, {name:"web5", kind:"php"}, {name:"db1", kind:"maria"}, {name:"db2", kind:"postgres"}, {name:"db3", kind:"couch"}, {name:"db4", kind:"percona"}, {name:"storage", kind:"storage"}, {name:"db-8", kind:"redis"}, {name:"customers", kind:"default"}, {name:"admin", kind:"default"}
   ]
   services  : [
-    {name:"web1", kind:"ruby"}, {name:"web2", kind:"mongo-db"}, {name:"web3", kind:"python"}, {name:"web4", kind:"java"}
+    {name:"web1", kind:"ruby"}, {name:"web2", kind:"mongo"}, {name:"web3", kind:"python"}, {name:"web4", kind:"java"}
   ]
   internals : [
     {name:"platform", kind:"platform"}, {name:"system", kind:"system"}
