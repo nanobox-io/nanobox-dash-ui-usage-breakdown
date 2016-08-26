@@ -11,8 +11,10 @@
       //- 
       thead.labels
         tr
-          td(colspan="2")
-          //- populated via javascript
+          th(colspan="2")
+          for metric in metrics
+            th.label= metric
+        
         
       //- 
       tbody.stats

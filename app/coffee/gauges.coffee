@@ -1,18 +1,10 @@
 module.exports = class Gauges
 
+  # this is used to calculate width, height, and inner and outer radii
+  _size: 68
+
   #
-  constructor : ($node) ->
-
-    #
-    self = @
-
-    #
-    @$node       = $node[0] # D3 likes actual DOM elements not jQuery DOM
-    size         = 135
-    @width       = size
-    @height      = size
-    outerRadius  = size/2
-    innerRadius  = size/2.7
+  constructor : (@$node) ->
 
     # create a pie layout function
     @pieFn = d3.layout.pie()
@@ -24,16 +16,16 @@ module.exports = class Gauges
 
     # create an arc generator function
     @arcFn = d3.svg.arc()
-      .innerRadius(innerRadius)
-      .outerRadius(outerRadius)
+      .innerRadius(@_size/1.35)
+      .outerRadius(@_size)
 
     # create base svg ("stage")
-    @svg = d3.select(@$node)
+    @svg = d3.select(@$node[0])
       .append("svg:svg")
         .attr
-          class: "gauges"
-          height: @height/2
-          transform:  "translate(#{0}, #{@height/2})"
+          class:     "gauges"
+          height:    @_size
+          transform: "translate(#{0}, #{@_size})"
 
   #
   update : (data) ->
@@ -44,9 +36,9 @@ module.exports = class Gauges
     # create each gauge
     gauges = @svg.selectAll("g.gauge").data(data)
       .enter()
-        .append("svg:g")
-        .style("opacity", 0)
-        .transition().duration(500).delay(250).style('opacity', 1)
+      .append("svg:g")
+        # .style("opacity", 0)
+        # .transition().duration(500).delay(250).style('opacity', 1)
 
       # for each gauge add a label and then draw all paths
       .each (d, i) ->
@@ -58,27 +50,26 @@ module.exports = class Gauges
         # twice the width of a gauge away from each other, in other words - a gauges
         # width inbetween each gauge
         gauge.attr
-          class: "gauge #{d.metric}"
-          transform:  "translate(#{self.width*i + i*15 + 5}, 0)"
+          class:      "gauge #{d.metric}"
+          transform:  "translate(#{(self._size*2)*i + i*15 + 5}, 0)"
 
         # add gauge label
-        gauge.append("svg:text")
-          .text(d.metric)
+        gauge.append("svg:text").text(d.metric)
           .attr
             class: "label"
-            x: (self.width/2)
-            y: (self.height/2) - 10
+            x: (self._size)
+            y: (self._size) - 10
             "text-anchor" : "middle"
 
         # add metrics
         gauge.selectAll("path").data(self.pieFn(d.data))
           .enter()
-            .append("path")
-              .attr
-                class: (d) -> "#{d.data.type} #{d.data.name}"
-                d: self.arcFn
-                transform: "translate(#{self.width/2}, #{self.height/2}) rotate(-90)"
-              .each (d) -> @_curAngle = d
+          .append("path")
+            .attr
+              class: (d) -> "#{d.data.type} #{d.data.name}"
+              d: self.arcFn
+              transform: "translate(#{self._size}, #{self._size}) rotate(-90)"
+            .each (d) -> @_curAngle = d
 
     # for each gauge select all the paths and update each arc
     @svg.selectAll("g.gauge").data(data)

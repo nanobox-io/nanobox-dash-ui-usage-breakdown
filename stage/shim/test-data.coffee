@@ -19,17 +19,13 @@ module.exports = class TestData
     PubSub.subscribe 'STATS.SUBSCRIBE.USAGE_BREAKDOWN', (m, data) =>
       usageBreakdownDataSimulator.waitForData(data)
 
-    PubSub.subscribe 'STATS.UNSUBSCRIBE', (m, data) =>
-
   #
   waitForData : (data) ->
     data.callback usageBreakdownDataSimulator.generateUsageBreakdownNoData()
-    setTimeout () ->
-
-      # disable updates by default
+    setInterval () ->
       # if window.enableUpdates
       data.callback usageBreakdownDataSimulator.generateUsageBreakdownData()
-    , 200
+    , 3000
 
   #
   generateUsageBreakdownNoData : () ->
