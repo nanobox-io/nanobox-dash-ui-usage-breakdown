@@ -66,7 +66,7 @@ $service-colors                         : #1785A7, #1CADE8, #576B6F, #76C163, #0
 
           // data.type
           &.service                     {}
-          &.internal                    {td.name {color: $system-txt;}}
+          &.internal                    {td.name {color: $system-txt;} td.icon {visibility:hidden;}}
         }
 
         // loop through each "service" assigning a service-color

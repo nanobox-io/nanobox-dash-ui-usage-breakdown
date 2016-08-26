@@ -11,7 +11,7 @@ module.exports = class TestData
   #
   generateUsageBreakdownData : () ->
     {
-      "hostStats": {"ram": 0.80, "cpu": 0.80},
+      "liveHostStats": {"ram": 0.80, "cpu": 0.80},
       "services": [
         {"type": "service", "name": "web1", "kind": "ruby", "metrics": {"ram": 0.10, "cpu": 0.10}},
         {"type": "service", "name": "web2", "kind": "node", "metrics": {"ram": 0.10, "cpu": 0.10}},

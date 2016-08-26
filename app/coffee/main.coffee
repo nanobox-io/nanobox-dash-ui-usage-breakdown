@@ -30,9 +30,9 @@ class UsageBreakdown
   #
   updateData : (data) =>
     fmtData = Utils.getServices(data)
-    fmtData.push {type: "internal", name: "platform", metrics: Utils.calculatePlatformUsage(data)}
-    fmtData.push {type: "internal", name: "system", metrics: Utils.calculateSystemUsage(data)}
-    fmtData.push {type: "internal", name: "free", metrics: Utils.calculateUnusedResources(data)}
+    fmtData.push {type: "internal", name: "platform", kind: "platform", metrics: Utils.calculatePlatformUsage(data)}
+    fmtData.push {type: "internal", name: "system", kind: "system", metrics: Utils.calculateSystemUsage(data)}
+    fmtData.push {type: "internal", name: "free", kind: "free", metrics: Utils.calculateUnusedResources(data)}
 
     @gauges.update(fmtData)
     @_updateTable(fmtData)
