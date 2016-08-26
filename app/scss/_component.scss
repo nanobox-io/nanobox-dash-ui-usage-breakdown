@@ -1,14 +1,14 @@
-$dark-gray                                              : #6B758A;
-$system-txt                                             : #273F45;
-$lighter-txt                                            : #769AA8;
+$dark-gray                              : #6B758A;
+$system-txt                             : #273F45;
+$lighter-txt                            : #769AA8;
 
 // Internal
-$platform-color                                         : #6FDBC2;
-$system-color                                           : #B9D1D7;
-$unused-color                                           : #E9F0F1;
+$platform-color                         : #6FDBC2;
+$system-color                           : #B9D1D7;
+$unused-color                           : #E9F0F1;
 
 // Services
-$service-colors                                         : #1785A7, #1CADE8, #576B6F, #76C163, #0E5669, #B0B0B0, #B36558, #6C9DA1, #5E8CB0, #8A5C3F, #652F63, #D9B4A1;
+$service-colors                         : #1785A7, #1CADE8, #576B6F, #76C163, #0E5669, #B0B0B0, #B36558, #6C9DA1, #5E8CB0, #8A5C3F, #652F63, #D9B4A1;
 
 //
 .nanobox-dash-ui-usage-breakdown        {
@@ -31,19 +31,17 @@ $service-colors                                         : #1785A7, #1CADE8, #576
         .internal                       {
           &.platform                    {fill: $platform-color;}
           &.system                      {fill: $system-color;}
-          &.unused                      {fill: $unused-color;}
+          &.free                        {fill: $unused-color;}
         }
       }
     }
 
     //
-    table.services                      { width:100%; margin-top: 17px; border-spacing:0px 5px;
-      tr td                             { padding:3px 0px;}
+    table.services                      {width:100%; margin-top: 17px; border-spacing:0px 5px;
+      tr td                             {padding:3px 0px;}
 
       //
-      thead.labels                      {
-        tr th.label                     {font-size:13px; width:20%; color:$dark-gray; text-transform:uppercase;}
-      }
+      thead.labels                      {tr th.label {font-size:13px; width:20%; color:$dark-gray; text-transform:uppercase;}}
 
       //
       tbody.stats                       {font-size:13px;
@@ -65,6 +63,10 @@ $service-colors                                         : #1785A7, #1CADE8, #576
             &.name                      {padding-left:10px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:white;}
             &.metric                    {text-align:center;}
           }
+
+          // data.type
+          &.service                     {}
+          &.internal                    {td.name {color: $system-txt;}}
         }
 
         // loop through each "service" assigning a service-color
@@ -74,16 +76,11 @@ $service-colors                                         : #1785A7, #1CADE8, #576
         }
 
         //
-        tr.platform                     {border-top:25px solid white;
-          td.name                       {background: $platform-color; color: $system-txt;}
-        }
-        tr.system                       {
-          td.name                       {background: $system-color; color:$system-txt;}
-        }
+        tr.platform                     {border-top:25px solid white; td.name {background: $platform-color;}}
+        tr.system                       {td.name {background: $system-color;}}
         tr.free                         {border-top:25px solid white;
-          td.name                       {background: $unused-color; color:$system-txt; font-style:italic;
-          &.name:after                  {content:" (unused)"}
-        }}
+          td.name                       {background: $unused-color; font-style:italic; &after {content:" (unused)"}}
+        }
       }
     }
   }

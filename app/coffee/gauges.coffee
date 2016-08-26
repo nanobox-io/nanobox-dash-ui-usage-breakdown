@@ -1,3 +1,6 @@
+Utils = require './utils'
+
+#
 module.exports = class Gauges
 
   # this is used to calculate width, height, and inner and outer radii
@@ -29,6 +32,9 @@ module.exports = class Gauges
 
   #
   update : (data) ->
+
+    #
+    data = Utils.getDataByMetrics(data)
 
     #
     self = @

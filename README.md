@@ -12,8 +12,6 @@ usage.update(data)
 #### Options
 | Option=default | Description |
 |---|---|
-| logsEnabled=false | Is logging enabled (T/F) |
-| logLevel="INFO" | Selected log level of [available levels](https://github.com/sdomino/dash/blob/master/src/dash.coffee#L8) |
 | id="" | The `id` of the service the component belongs to |
 
 ## Data structures
@@ -26,12 +24,17 @@ The data structure is an array of "service objects"
 
 ##### Data by service structure (array of service objects)
 ```coffeescript
-data = [
-  {type:"service",  name:"web1",     metrics: {ram:.30, cpu:.25}},
-  {type:"service",  name:"db1",      metrics: {ram:.20, cpu:.25}},
-  {type:"internal", name:"platform", metrics: {ram:.10, cpu:.10}},
-  {type:"internal", name:"other",    metrics: {ram:.10, cpu:.10}}
-]
+data = {
+  "hostStats": {"ram": 0.80, "cpu": 0.80},
+  "services": [
+    {"type": "service", "name": "web1", "kind": "ruby", "metrics": {"ram": 0.10, "cpu": 0.10}},
+    {"type": "service", "name": "web2", "kind": "node", "metrics": {"ram": 0.10, "cpu": 0.10}},
+    {"type": "service", "name": "dba1", "kind": "mongo", "metrics": {"ram": 0.10, "cpu": 0.10}},
+    {"type": "internal", "name": "inta", "kind": "rout", "metrics": {"ram": 0.10, "cpu": 0.10}},
+    {"type": "internal", "name": "intb", "kind": "logv", "metrics": {"ram": 0.10, "cpu": 0.10}},
+    {"type": "internal", "name": "intc", "kind": "mist", "metrics": {"ram": 0.10, "cpu": 0.10}}
+  ]
+}
 ```
 
 ##### Data by metric structure

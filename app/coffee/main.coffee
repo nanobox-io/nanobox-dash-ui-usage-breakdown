@@ -29,14 +29,16 @@ class UsageBreakdown
 
   #
   updateData : (data) =>
-    @gauges.update(Utils.getDataByMetrics(data))
-    @_updateTable(data)
+    fmtData = Utils.getServices(data)
+    fmtData.push {type: "internal", name: "platform", metrics: Utils.calculatePlatformUsage(data)}
+    fmtData.push {type: "internal", name: "system", metrics: Utils.calculateSystemUsage(data)}
+    fmtData.push {type: "internal", name: "free", metrics: Utils.calculateUnusedResources(data)}
+
+    @gauges.update(fmtData)
+    @_updateTable(fmtData)
 
   #
   _updateTable : (data) ->
-
-    # add unused data to the dataset
-    data.push {type: "internal", name: "free", metrics: Utils.calculateUnused(data)}
 
     #
     table = d3.select($("table.services tbody.stats", @$node).get(0))
@@ -51,7 +53,7 @@ class UsageBreakdown
     # CREATE
     table.selectAll("tr").data(data)
       .enter()
-      .append("tr").attr("class", (d) -> d.name)
+      .append("tr").attr("class", (d) -> "#{d.name} #{d.type}")
         .each (d) ->
           d3.select(@)
             .append("td").attr(class: "icon")
