@@ -46,8 +46,4 @@ module.exports = class Utils
 
   # calculateUnusedResources
   @calculateUnusedResources : (data) ->
-    [totalCPU, totalRAM] = [0, 0]
-    for service in data.services
-      totalCPU += service.metrics.cpu
-      totalRAM += service.metrics.ram
-    {cpu: data.liveHostStats.cpu - totalCPU, ram: data.liveHostStats.ram - totalRAM}
+    {cpu: 1 - data.liveHostStats.cpu, ram: 1 - data.liveHostStats.ram}
