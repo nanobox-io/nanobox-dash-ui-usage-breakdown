@@ -42,7 +42,7 @@ module.exports = class Utils
     for service in data.services
       serviceCPU += service.metrics.cpu
       serviceRAM += service.metrics.ram
-    {cpu: data.hostStats.cpu - serviceCPU, ram: data.hostStats.ram - serviceRAM}
+    {cpu: data.liveHostStats.cpu - serviceCPU, ram: data.liveHostStats.ram - serviceRAM}
 
   # calculateUnusedResources
   @calculateUnusedResources : (data) ->
@@ -50,4 +50,4 @@ module.exports = class Utils
     for service in data.services
       totalCPU += service.metrics.cpu
       totalRAM += service.metrics.ram
-    {cpu: data.hostStats.cpu - totalCPU, ram: data.hostStats.ram - totalRAM}
+    {cpu: data.liveHostStats.cpu - totalCPU, ram: data.liveHostStats.ram - totalRAM}
