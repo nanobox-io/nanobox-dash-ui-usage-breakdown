@@ -69,10 +69,10 @@ class UsageBreakdown
   #
   _updateData : () ->
     PubSub.publish 'STATS.SUBSCRIBE.USAGE_BREAKDOWN', {
-      entity         : @options.entity
-      entityId       : @options.entityId
-      metrics        : @options.metrics
-      callback       : @updateData
+      metrics       : @options.metrics
+      services      : @options.services
+      liveHostStats : @options.liveHostStats
+      callback      : @updateData
     }
 
 #
