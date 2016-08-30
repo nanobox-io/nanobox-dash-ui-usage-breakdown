@@ -62,7 +62,7 @@ class UsageBreakdown
           d3.select(@).append("td").attr(class: "stat metric cpu").text("#{(d.metrics.cpu*100).toPrecision(2)}%")
 
     #
-    castShadows $("tbody", @$table)
+    castShadows(@$node)
 
   #
   _updateData : () ->
