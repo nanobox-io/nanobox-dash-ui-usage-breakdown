@@ -2,7 +2,7 @@
 ```coffeescript
 
 # initialize
-usage = new nanobox.UsageBreakdown $("body")
+usage = new nanobox.UsageBreakdown $("body"), options
 usage.build()
 
 # update
@@ -19,13 +19,13 @@ The data structure is an array of "service objects"
 
 ##### Single Service Object
 ``` coffeescript
-{type:"service", name:"web1", metrics: {ram:.30, cpu:.25}}
+{type:"service", name:"web1", kind:"ruby", metrics: {ram:.30, cpu:.25}}
 ```
 
 ##### Data by service structure (array of service objects)
 ```coffeescript
 data = {
-  "hostStats": {"ram": 0.80, "cpu": 0.80},
+  "liveHostStats": {"ram": 0.80, "cpu": 0.80},
   "services": [
     {"type": "service", "name": "web1", "kind": "ruby", "metrics": {"ram": 0.10, "cpu": 0.10}},
     {"type": "service", "name": "web2", "kind": "node", "metrics": {"ram": 0.10, "cpu": 0.10}},
@@ -61,4 +61,4 @@ data = [
 ]
 ```
 
-NOTE: There are only two types of services, `internal` and `service`. `internal` services are ones that Pagoda Box has installed on the system, while `service`'s are actual services running as part of a users app.
+NOTE: There are only two types of services, `internal` and `service`. `internal` services are ones that Nanobox has installed on the system, while `service`'s are actual services running as part of a users app.

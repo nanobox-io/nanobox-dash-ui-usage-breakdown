@@ -52,9 +52,7 @@ module.exports = class Gauges
         #
         gauge = d3.select(@)
 
-        # position each gauge relative to others; right now the positioning is
-        # twice the width of a gauge away from each other, in other words - a gauges
-        # width inbetween each gauge
+        # position each gauge relative to others
         gauge.attr
           class:      "gauge #{d.metric}"
           transform:  "translate(#{(self._size*2)*i + i*15 + 5}, 0)"

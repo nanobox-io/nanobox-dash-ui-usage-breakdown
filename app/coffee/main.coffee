@@ -19,8 +19,6 @@ class UsageBreakdown
 
   #
   build : () ->
-
-    #
     @gauges = new Gauges $(".gauges", @$node)
     @$table = $("table.services", @$node)
 
