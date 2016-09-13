@@ -45,8 +45,11 @@ class UsageBreakdown
     table.selectAll("tr").data(data)
       .each (d) ->
         d3.select(@).selectAll(".name").text(d.name)
-        d3.select(@).selectAll(".ram").text("#{(d.metrics.ram).toPrecision(2)*100}%")
-        d3.select(@).selectAll(".cpu").text("#{(d.metrics.cpu).toPrecision(2)*100}%")
+
+        # *1 on the toPrecision because javascript does weird stuff if a number
+        # is precisioned smaller than it's actual length
+        d3.select(@).selectAll(".ram").text("#{(d.metrics.ram*100).toPrecision(2)*1}%")
+        d3.select(@).selectAll(".cpu").text("#{(d.metrics.cpu*100).toPrecision(2)*1}%")
 
     # CREATE
     table.selectAll("tr").data(data)
@@ -58,8 +61,11 @@ class UsageBreakdown
             .append("div").attr(class: "icon-wrap")
             .append("img").attr(class: "shadow-icon", "data-src": "hex-#{d.kind}", scalable: true)
           d3.select(@).append("td").attr(class: "stat name").text(d.name)
-          d3.select(@).append("td").attr(class: "stat metric ram").text("#{(d.metrics.ram).toPrecision(2)*100}%")
-          d3.select(@).append("td").attr(class: "stat metric cpu").text("#{(d.metrics.cpu).toPrecision(2)*100}%")
+
+          # *1 on the toPrecision because javascript does weird stuff if ia number
+          # is precisioned smaller than it's actual length
+          d3.select(@).append("td").attr(class: "stat metric ram").text("#{(d.metrics.ram*100).toPrecision(2)*1}%")
+          d3.select(@).append("td").attr(class: "stat metric cpu").text("#{(d.metrics.cpu*100).toPrecision(2)*1}%")
 
     #
     castShadows(@$node)
