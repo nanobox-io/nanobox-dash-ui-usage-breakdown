@@ -45,8 +45,8 @@ class UsageBreakdown
     table.selectAll("tr").data(data)
       .each (d) ->
         d3.select(@).selectAll(".name").text(d.name)
-        d3.select(@).selectAll(".ram").text(parseFloat("#{(d.metrics.ram*100).toPrecision(2)}%"))
-        d3.select(@).selectAll(".cpu").text(parseFloat("#{(d.metrics.cpu*100).toPrecision(2)}%"))
+        d3.select(@).selectAll(".ram").text(parseFloat((d.metrics.ram*100).toPrecision(2))+"%")
+        d3.select(@).selectAll(".cpu").text(parseFloat((d.metrics.cpu*100).toPrecision(2))+"%")
 
     # CREATE
     table.selectAll("tr").data(data)
@@ -58,8 +58,8 @@ class UsageBreakdown
             .append("div").attr(class: "icon-wrap")
             .append("img").attr(class: "shadow-icon", "data-src": "hex-#{d.kind}", scalable: true)
           d3.select(@).append("td").attr(class: "stat name").text(d.name)
-          d3.select(@).append("td").attr(class: "stat metric ram").text(parseFloat("#{(d.metrics.ram*100).toPrecision(2)}%"))
-          d3.select(@).append("td").attr(class: "stat metric cpu").text(parseFloat("#{(d.metrics.cpu*100).toPrecision(2)}%"))
+          d3.select(@).append("td").attr(class: "stat metric ram").text(parseFloat((d.metrics.ram*100).toPrecision(2))+"%")
+          d3.select(@).append("td").attr(class: "stat metric cpu").text(parseFloat((d.metrics.cpu*100).toPrecision(2))+"%")
 
     #
     castShadows(@$node)
