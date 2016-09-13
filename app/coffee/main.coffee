@@ -11,7 +11,7 @@ class UsageBreakdown
   constructor : ($el, @options={}) ->
 
     # set defaults
-    if !@options.metrics then @options.metrics = ["cpu", "ram"]
+    @options.metrics ||= ["cpu", "ram"]
 
     #
     @$node = $ component({metrics: @options.metrics})
