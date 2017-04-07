@@ -20,6 +20,14 @@ module.exports = class Utils
     # convert the metrics object into an array of data arranged by metrics
     Object.keys(metrics).map (k) -> {metric: k, data: metrics[k]}
 
+  # normalize; apparently we no longer need to do this, but I didn't write a note
+  # as to why when I commented this out, so... not sure.
+  # @normalize : (data) ->
+  #   for service in data.services
+  #     for k, v of service.metrics
+  #       if v <= 0 then v = 0
+  #   data
+
   # getServices
   @getServices : (data) ->
     services = []

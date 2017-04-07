@@ -27,6 +27,11 @@ class UsageBreakdown
 
   #
   updateData : (data) =>
+
+    #
+    # data = Utils.normalize(data)
+
+    #
     fmtData = Utils.getServices(data)
     fmtData.push {type: "internal", name: "platform", kind: "platform", metrics: Utils.calculatePlatformUsage(data)}
     fmtData.push {type: "internal", name: "system", kind: "system", metrics: Utils.calculateSystemUsage(data)}

@@ -28,7 +28,11 @@ module.exports = class Gauges
         .attr
           class:     "gauges"
           height:    @_size
-          transform: "translate(#{0}, #{@_size})"
+
+          # at one point the Y translation was set to @_size but this broke with
+          # some new updates to browsers. Not sure why it was set to that in the
+          # first place...
+          transform: "translate(#{0}, #{0})"
 
   #
   update : (data) ->

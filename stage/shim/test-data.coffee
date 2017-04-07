@@ -16,8 +16,8 @@ module.exports = class TestData
         {"type": "service", "name": "web1", "kind": "ruby", "metrics": {"ram": 0.10, "cpu": 0.10}},
         {"type": "service", "name": "web2", "kind": "node", "metrics": {"ram": 0.10, "cpu": 0.10}},
         {"type": "service", "name": "dba1", "kind": "mongo", "metrics": {"ram": 0.10, "cpu": 0.10}},
-        {"type": "internal", "name": "inta", "kind": "rout", "metrics": {"ram": 0.10, "cpu": 0.10}},
-        {"type": "internal", "name": "intb", "kind": "logv", "metrics": {"ram": 0.10, "cpu": 0.10}},
+        {"type": "internal", "name": "inta", "kind": "router", "metrics": {"ram": 0.10, "cpu": 0.10}},
+        {"type": "internal", "name": "intb", "kind": "logvac", "metrics": {"ram": 0.10, "cpu": 0.10}},
         {"type": "internal", "name": "intc", "kind": "mist", "metrics": {"ram": 0.10, "cpu": 0.10}}
       ]
     }
